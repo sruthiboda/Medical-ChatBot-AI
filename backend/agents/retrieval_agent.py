@@ -1,0 +1,2 @@
+"""Retrieval agent module boundary."""
+

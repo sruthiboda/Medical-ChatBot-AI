@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="2100" viewBox="0 0 1200 2100" role="img" aria-labelledby="title desc">
+  <title id="title">Agent Workflow Diagram</title>
+  <desc id="desc">Clean workflow chart for incoming medical questions, retrieval, evidence guardrails, citations, and grounded answer output.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#071018"/>
+      <stop offset="0.55" stop-color="#101b27"/>
+      <stop offset="1" stop-color="#071018"/>
+    </linearGradient>
+    <linearGradient id="node" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#152637"/>
+      <stop offset="1" stop-color="#0b151f"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#17483c"/>
+      <stop offset="1" stop-color="#0d2734"/>
+    </linearGradient>
+    <filter id="shadow" x="-12%" y="-12%" width="124%" height="124%">
+      <feDropShadow dx="0" dy="12" stdDeviation="12" flood-color="#000000" flood-opacity="0.3"/>
+    </filter>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#25d0b2"/>
+    </marker>
+    <marker id="warnArrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#ff8c6b"/>
+    </marker>
+    <style>
+      .kicker { fill: #25d0b2; font-family: Inter, Segoe UI, Arial, sans-serif; font-size: 21px; font-weight: 900; }
+      .titleText { fill: #edf7f6; font-family: Inter, Segoe UI, Arial, sans-serif; font-size: 44px; font-weight: 900; }
+      .sub { fill: #9aafbf; font-family: Inter, Segoe UI, Arial, sans-serif; font-size: 22px; font-weight: 650; }
+      .nodeText { fill: #edf7f6; font-family: Inter, Segoe UI, Arial, sans-serif; font-size: 25px; font-weight: 850; }
+      .nodeSmall { fill: #a4b8c7; font-family: Inter, Segoe UI, Arial, sans-serif; font-size: 19px; font-weight: 650; }
+      .decisionText { fill: #f4c76b; font-family: Inter, Segoe UI, Arial, sans-serif; font-size: 25px; font-weight: 900; }
+      .label { fill: #dbe9ff; font-family: Inter, Segoe UI, Arial, sans-serif; font-size: 19px; font-weight: 900; }
+      .warnLabel { fill: #ffb09a; font-family: Inter, Segoe UI, Arial, sans-serif; font-size: 19px; font-weight: 900; }
+      .line { fill: none; stroke: #25d0b2; stroke-width: 4.5; stroke-linecap: round; stroke-linejoin: round; marker-end: url(#arrow); }
+      .softLine { fill: none; stroke: #8fb7ff; stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; marker-end: url(#arrow); }
+      .warnLine { fill: none; stroke: #ff8c6b; stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; marker-end: url(#warnArrow); }
+    </style>
+  </defs>
+  <rect width="1200" height="2100" rx="32" fill="url(#bg)"/>
+  <rect x="34" y="34" width="1132" height="2032" rx="26" fill="none" stroke="#263847" stroke-width="2"/>
+  <text x="82" y="98" class="kicker">MEDCITE SENTINEL</text>
+  <text x="82" y="150" class="titleText">Agent Workflow Diagram</text>
+  <text x="82" y="190" class="sub">Grounded medical answers from trusted retrieved literature</text>
+  <g filter="url(#shadow)"><rect x="335" y="250" width="530" height="84" rx="18" fill="url(#accent)" stroke="#25d0b2" stroke-width="2"/><text x="600" y="300" text-anchor="middle" class="nodeText">Incoming medical question</text></g>
+  <path d="M600 334 L600 392" class="line"/>
+  <g filter="url(#shadow)"><rect x="335" y="392" width="530" height="84" rx="18" fill="url(#node)" stroke="#30475a" stroke-width="2"/><text x="600" y="442" text-anchor="middle" class="nodeText">QueryUnderstandingAgent</text></g>
+  <path d="M600 476 L600 542" class="line"/>
+  <g filter="url(#shadow)"><path d="M600 532 L780 625 L600 718 L420 625 Z" fill="#1b2030" stroke="#f4c76b" stroke-width="2"/><text x="600" y="633" text-anchor="middle" class="decisionText">ClarificationAgent</text></g>
+  <path d="M420 625 L245 625 L245 790 L320 790" class="warnLine"/>
+  <text x="158" y="605" class="warnLabel">Needs more detail</text>
+  <g filter="url(#shadow)"><rect x="320" y="742" width="360" height="96" rx="18" fill="#1b171a" stroke="#ff8c6b" stroke-width="2"/><text x="500" y="784" text-anchor="middle" class="nodeText">Return follow-up</text><text x="500" y="815" text-anchor="middle" class="nodeSmall">questions</text></g>
+  <path d="M600 718 L600 880" class="line"/>
+  <text x="624" y="776" class="label">Clear enough</text>
+  <g filter="url(#shadow)"><rect x="335" y="880" width="530" height="84" rx="18" fill="url(#node)" stroke="#30475a" stroke-width="2"/><text x="600" y="930" text-anchor="middle" class="nodeText">ClinicalQueryRewriterAgent</text></g>
+  <path d="M600 964 L600 1022" class="line"/>
+  <g filter="url(#shadow)"><rect x="335" y="1022" width="530" height="84" rx="18" fill="url(#node)" stroke="#30475a" stroke-width="2"/><text x="600" y="1072" text-anchor="middle" class="nodeText">RetrievalAgent</text></g>
+  <path d="M600 1106 L600 1164" class="line"/>
+  <g filter="url(#shadow)"><rect x="335" y="1164" width="530" height="84" rx="18" fill="url(#node)" stroke="#30475a" stroke-width="2"/><text x="600" y="1214" text-anchor="middle" class="nodeText">TrustedSourceFilterAgent</text></g>
+  <path d="M600 1248 L600 1306" class="line"/>
+  <g filter="url(#shadow)"><rect x="335" y="1306" width="530" height="84" rx="18" fill="url(#node)" stroke="#30475a" stroke-width="2"/><text x="600" y="1356" text-anchor="middle" class="nodeText">RelevanceRankingAgent</text></g>
+  <path d="M600 1390 L600 1456" class="line"/>
+  <g filter="url(#shadow)"><path d="M600 1446 L790 1544 L600 1642 L410 1544 Z" fill="#1b2030" stroke="#f4c76b" stroke-width="2"/><text x="600" y="1552" text-anchor="middle" class="decisionText">HallucinationGuardAgent</text></g>
+  <path d="M410 1544 L205 1544 L205 1754 L312 1754" class="warnLine"/>
+  <text x="150" y="1518" class="warnLabel">Weak evidence</text>
+  <g filter="url(#shadow)"><rect x="312" y="1698" width="392" height="112" rx="18" fill="#1b171a" stroke="#ff8c6b" stroke-width="2"/><text x="508" y="1742" text-anchor="middle" class="nodeText">Return: I don't know</text><text x="508" y="1773" text-anchor="middle" class="nodeSmall">based on retrieved medical literature</text></g>
+  <path d="M790 1544 L1010 1544 L1010 1690 L892 1690" class="softLine"/>
+  <text x="838" y="1518" class="label">Evidence sufficient</text>
+  <g filter="url(#shadow)"><rect x="660" y="1648" width="360" height="84" rx="18" fill="url(#node)" stroke="#30475a" stroke-width="2"/><text x="840" y="1698" text-anchor="middle" class="nodeText">ResponseGenerationAgent</text></g>
+  <path d="M840 1732 L840 1790" class="softLine"/>
+  <g filter="url(#shadow)"><rect x="660" y="1790" width="360" height="84" rx="18" fill="url(#node)" stroke="#30475a" stroke-width="2"/><text x="840" y="1840" text-anchor="middle" class="nodeText">CitationAgent</text></g>
+  <path d="M840 1874 L840 1932" class="softLine"/>
+  <g filter="url(#shadow)"><rect x="605" y="1932" width="470" height="104" rx="18" fill="url(#accent)" stroke="#25d0b2" stroke-width="2"/><text x="840" y="1976" text-anchor="middle" class="nodeText">Stream grounded answer</text><text x="840" y="2007" text-anchor="middle" class="nodeSmall">citations + workflow trace</text></g>
+</svg>
