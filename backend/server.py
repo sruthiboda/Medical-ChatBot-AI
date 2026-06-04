@@ -146,6 +146,27 @@ QUESTION_NOISE_TERMS = STOPWORDS | INTENT_TERMS | {
     "therapy", "therapies", "treatment", "treatments", "management",
 }
 
+HARMFUL_REQUEST_TERMS = {
+    "assassinate", "attack", "choke", "harm", "hurt", "kill", "murder",
+    "poison", "shoot", "stab", "strangle", "suffocate",
+}
+
+HARMFUL_TARGET_TERMS = {
+    "person", "people", "someone", "somebody", "human", "humans", "man",
+    "woman", "child", "adult", "patient", "patients",
+}
+
+MEDICAL_DOMAIN_TERMS = {
+    "adverse", "afib", "atrial", "bacteria", "bacterial", "blood", "bmi",
+    "cancer", "cardiac", "cardiovascular", "cell", "cells", "clinical",
+    "copd", "crispr", "diagnosis", "disease", "drug", "evidence", "fda",
+    "fever", "gene", "genetic", "genome", "headache", "heart", "hypertension",
+    "infection", "journal", "kidney", "lancet", "medical", "medicine",
+    "metformin", "migraine", "mrna", "nature", "neuropathy", "patient",
+    "pregnancy", "pubmed", "research", "safety", "sickle", "stroke",
+    "symptom", "therapy", "treatment", "trial", "vitamin",
+} | KNOWN_DRUGS | SAFETY_TERMS | SYMPTOM_HINTS | TREATMENT_QUERY_TERMS
+
 
 class MedicalRagHandler(SimpleHTTPRequestHandler):
     def __init__(self, *args, **kwargs):
@@ -202,6 +223,26 @@ class MedicalRagHandler(SimpleHTTPRequestHandler):
 
 def run_agentic_workflow(query):
     workflow = []
+    guardrail = unsupported_query_reason(query)
+    if guardrail:
+        return {
+            "answer": UNKNOWN_RESPONSE,
+            "sources": [],
+            "workflow": [
+                {
+                    "agent": "query-understanding-agent",
+                    "status": "blocked",
+                    "detail": guardrail,
+                },
+                {
+                    "agent": "hallucination-guard-agent",
+                    "status": "blocked",
+                    "detail": "Query is outside the supported medical evidence workflow.",
+                },
+            ],
+            "confidence": "low",
+        }
+
     understanding = understand_query(query)
     workflow.append({
         "agent": "query-understanding-agent",
@@ -407,6 +448,25 @@ def dedupe_preserve_order(items):
         seen.add(item)
         output.append(item)
     return output
+
+
+def unsupported_query_reason(query):
+    tokens = set(re.findall(r"[a-z0-9-]+", query.lower()))
+    if not tokens:
+        return "Empty query cannot be searched safely."
+
+    harmful_terms = tokens & HARMFUL_REQUEST_TERMS
+    harmful_targets = tokens & HARMFUL_TARGET_TERMS
+    has_medical_context = bool(tokens & MEDICAL_DOMAIN_TERMS) or bool(extract_medical_phrases(query))
+
+    if harmful_terms and harmful_targets:
+        return "Unsafe harmful request; not a medical evidence question."
+    if harmful_terms and not has_medical_context:
+        return "Unsafe or non-medical request; not a supported medical evidence question."
+    if not has_medical_context and len(tokens - STOPWORDS) <= 5:
+        return "No clear medical evidence topic detected."
+
+    return ""
 
 
 def understand_query(query):
